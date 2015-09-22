@@ -1,8 +1,6 @@
 # PerformanceBenchmark
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/performance_benchmark`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem is an rspec like simple DSL to perform code benchmarking using ruby benchmark library under the hood and group results in a hash.
 
 ## Installation
 
@@ -22,7 +20,38 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Define test benchmarking blocks using `PerformanceBenchmark.benchmark` method. Within them variable and preprocessing blocks can be defined using `let` and `prepare`. Finally `run` block defines code to be benchmarked.
+
+`benchmark` blocks are executed one after the other. At the end results can be accessed through `PerformanceBenchmark.results`
+
+```ruby
+require 'performance_benchmark'
+
+PerformanceBenchmark.benchmark 'Test1' do
+  let(:foo) { 'rspec like variable' }
+  prepare do
+    # do some stuff before run
+  end
+
+  run do
+    # process to be run under benchmark
+  end
+end
+
+PerformanceBenchmark.benchmark 'Test2' do
+  let(:foo) { 'rspec like variable' }
+  prepare do
+    # do some stuff before run
+  end
+
+  run do
+    # process to be run under benchmark
+  end
+end
+
+puts PerformanceBenchmark.results
+# => { 'Test1' => 2, 'Test2' => 5 }
+```
 
 ## Development
 
