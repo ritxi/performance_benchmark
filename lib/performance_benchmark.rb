@@ -31,9 +31,11 @@ class PerformanceBenchmark
   class Environment
     def initialize
       @let ||= {}
+      @let_cache ||= {}
     end
 
     def let(name, &block)
+      return @let_cache[name.to_sym] ||= @let[name.to_sym].call unless block
       @let[name.to_sym] = block
     end
 
@@ -53,7 +55,7 @@ class PerformanceBenchmark
     def method_missing(method_sym, *arguments, &block)
       # the first argument is a Symbol, so you need to_s it if you want to pattern match
       if @let.keys.include?(method_sym)
-        @let[method_sym].call
+        let(method_sym)
       else
         super
       end
